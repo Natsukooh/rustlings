@@ -10,15 +10,49 @@
 
 // Execute 'rustlings hint generics3' for hints!
 
-// I AM NOT DONE
+use std::fmt;
 
-pub struct ReportCard {
-    pub grade: f32,
+pub struct ReportCard<T> {
+    pub grade: T,
     pub student_name: String,
     pub student_age: u8,
 }
 
-impl ReportCard {
+pub struct AlphabeticalGrade
+{
+    pub letter: char,
+    pub sign: AlphabeticalGradeSign
+}
+
+pub enum AlphabeticalGradeSign
+{
+    Plus,
+    Minus,
+    None
+}
+
+impl fmt::Display for AlphabeticalGradeSign
+{
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result
+    {
+        match self
+        {
+            AlphabeticalGradeSign::None => write!(f, ""),
+            AlphabeticalGradeSign::Plus => write!(f, "+"),
+            AlphabeticalGradeSign::Minus => write!(f, "-")
+        }
+    }
+}
+
+impl fmt::Display for AlphabeticalGrade
+{
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result
+    {
+        write!(f, "{}{}", self.letter, self.sign)
+    }
+}
+
+impl<T: fmt::Display> ReportCard<T> {
     pub fn print(&self) -> String {
         format!("{} ({}) - achieved a grade of {}",
             &self.student_name, &self.student_age, &self.grade)
@@ -46,7 +80,11 @@ mod tests {
     fn generate_alphabetic_report_card() {
         // TODO: Make sure to change the grade here after you finish the exercise.
         let report_card = ReportCard {
-            grade: 2.1,
+            grade: AlphabeticalGrade
+            {
+                letter: 'A',
+                sign: AlphabeticalGradeSign::Plus
+            },
             student_name: "Gary Plotter".to_string(),
             student_age: 11,
         };
